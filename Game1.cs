@@ -6,10 +6,18 @@ using System.Collections.Generic;
 
 namespace Mono_Topic_5___Making_a_Class
 {
+    enum Screen
+    {
+        Title,
+        House,
+        End
+    }
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        Screen screen;
 
         List<Texture2D> ghostTextures;
         Texture2D titleTexture;
@@ -75,6 +83,9 @@ namespace Mono_Topic_5___Making_a_Class
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            _spriteBatch.Begin();
+            _spriteBatch.Draw(hauntedBackgroundTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
