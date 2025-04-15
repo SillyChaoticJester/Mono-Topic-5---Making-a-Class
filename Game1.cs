@@ -18,6 +18,7 @@ namespace Mono_Topic_5___Making_a_Class
         private SpriteBatch _spriteBatch;
 
         Screen screen;
+        Ghost ghost1;
 
         List<Texture2D> ghostTextures;
         Texture2D titleTexture;
@@ -45,6 +46,8 @@ namespace Mono_Topic_5___Making_a_Class
             marioRect = new Rectangle(0, 0, 30, 30);
 
             base.Initialize();
+
+            ghost1 = new Ghost(ghostTextures, new Rectangle(150, 250, 40, 40));
         }
 
         protected override void LoadContent()
@@ -74,6 +77,7 @@ namespace Mono_Topic_5___Making_a_Class
             // TODO: Add your update logic here
 
             mouseState = Mouse.GetState();
+            ghost1.Update(mouseState);
 
             base.Update(gameTime);
         }
@@ -85,6 +89,7 @@ namespace Mono_Topic_5___Making_a_Class
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
             _spriteBatch.Draw(hauntedBackgroundTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
+            ghost1.Draw(_spriteBatch);
             _spriteBatch.End();
 
             base.Draw(gameTime);

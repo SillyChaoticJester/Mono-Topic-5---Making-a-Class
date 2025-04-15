@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,8 +15,39 @@ namespace Mono_Topic_5___Making_a_Class
         private Vector2 _speed;
         private Rectangle _location;
         private int _textureIndex;
-    }
+        private SpriteEffects _direction;
 
-    
+        public Ghost(List<Texture2D> textures, Rectangle location)
+        {
+            _textures = textures;
+            _location = location;
+            _textureIndex = 0;
+            _speed = Vector2.Zero;
+            _direction = SpriteEffects.None;
+        }
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(_textures[0], _location, null, Color.White, 0f, Vector2.Zero, _direction, 1);
+        }
+
+        public void Update(MouseState mouseState)
+        {
+            if (mouseState.X < _location.X)
+            {
+                _direction = SpriteEffects.FlipHorizontally;
+            }
+            else if (mouseState.X > _location.X)
+            {
+                _direction = SpriteEffects.None;
+            }
+        }
+
+        public Rectangle Rect
+        {
+            get { return _location; }
+        }
+
+    }
 
 }
