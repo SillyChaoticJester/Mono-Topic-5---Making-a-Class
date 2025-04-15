@@ -16,6 +16,8 @@ namespace Mono_Topic_5___Making_a_Class
         private Rectangle _location;
         private int _textureIndex;
         private SpriteEffects _direction;
+        private float _animationSpeed;
+        private float _seconds;
 
         public Ghost(List<Texture2D> textures, Rectangle location)
         {
@@ -24,23 +26,37 @@ namespace Mono_Topic_5___Making_a_Class
             _textureIndex = 0;
             _speed = Vector2.Zero;
             _direction = SpriteEffects.None;
+            _animationSpeed = 0.2f;
+            _seconds = 0;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_textures[0], _location, null, Color.White, 0f, Vector2.Zero, _direction, 1);
+            spriteBatch.Draw(_textures[_textureIndex], _location, null, Color.White, 0f, Vector2.Zero, _direction, 1);
         }
 
-        public void Update(MouseState mouseState)
+        public void Update(GameTime gameTime, MouseState mouseState)
         {
+            _speed = Vector2.Zero;
             if (mouseState.X < _location.X)
             {
                 _direction = SpriteEffects.FlipHorizontally;
+                _speed.X = -1;
             }
             else if (mouseState.X > _location.X)
             {
                 _direction = SpriteEffects.None;
+                _speed.X = 1;
             }
+            if (mouseState.Y < _location.Y)
+            {
+                _speed.Y = -1;
+            }
+            else if (mouseState.Y > _location.Y)
+            {
+                _speed.Y = 1;
+            }
+            _location.Offset(_speed);
         }
 
         public Rectangle Rect
