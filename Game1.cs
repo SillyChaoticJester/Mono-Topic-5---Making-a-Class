@@ -77,7 +77,7 @@ namespace Mono_Topic_5___Making_a_Class
             // TODO: Add your update logic here
 
             mouseState = Mouse.GetState();
-            ghost1.Update(mouseState);
+            ghost1.Update(gameTime, mouseState);
 
             base.Update(gameTime);
         }

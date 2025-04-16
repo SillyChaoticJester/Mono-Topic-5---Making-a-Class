@@ -56,6 +56,25 @@ namespace Mono_Topic_5___Making_a_Class
             {
                 _speed.Y = 1;
             }
+            if (mouseState.LeftButton == ButtonState.Released)
+            {
+                _speed = Vector2.Zero;
+                _textureIndex = 0;
+                _seconds = 0f;
+            }
+            else if (_speed != Vector2.Zero)
+            {
+                _seconds += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (_seconds > _animationSpeed)
+                {
+                    _seconds = 0;
+                    _textureIndex++;
+                    if (_textureIndex >= _textures.Count)
+                    {
+                        _textureIndex = 1;
+                    }
+                }
+            }
             _location.Offset(_speed);
         }
 
