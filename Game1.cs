@@ -28,6 +28,7 @@ namespace Mono_Topic_5___Making_a_Class
         Rectangle marioRect;
 
         MouseState mouseState;
+        KeyboardState keyboardState;
         Random generator;
 
         public Game1()
@@ -44,6 +45,7 @@ namespace Mono_Topic_5___Making_a_Class
             ghostTextures = new List<Texture2D>();
             generator = new Random();
             marioRect = new Rectangle(0, 0, 30, 30);
+            screen = Screen.Title;
 
             base.Initialize();
 
@@ -77,7 +79,24 @@ namespace Mono_Topic_5___Making_a_Class
             // TODO: Add your update logic here
 
             mouseState = Mouse.GetState();
-            ghost1.Update(gameTime, mouseState);
+            keyboardState = Keyboard.GetState();
+            
+
+            if (screen == Screen.Title)
+            {
+                if (keyboardState.IsKeyDown(Keys.Enter))
+                {
+                    screen = Screen.House;
+                }
+            }
+            else if (screen == Screen.House)
+            {
+                ghost1.Update(gameTime, mouseState);
+                if (ghost1.Contains(mouseState.Position) && mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    screen = Screen.End;
+                }
+            }
 
             base.Update(gameTime);
         }
@@ -88,8 +107,19 @@ namespace Mono_Topic_5___Making_a_Class
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            _spriteBatch.Draw(hauntedBackgroundTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
-            ghost1.Draw(_spriteBatch);
+            if (screen == Screen.Title)
+            {
+                _spriteBatch.Draw(titleTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
+            }
+            else if (screen == Screen.House)
+            {
+                _spriteBatch.Draw(hauntedBackgroundTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
+                ghost1.Draw(_spriteBatch);
+            }
+            else
+            {
+                _spriteBatch.Draw(endTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
+            }
             _spriteBatch.End();
 
             base.Draw(gameTime);

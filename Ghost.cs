@@ -83,6 +83,16 @@ namespace Mono_Topic_5___Making_a_Class
             get { return _location; }
         }
 
+        public bool Contains(Point point)
+        {
+            return _location.Contains(point);
+        }
+
+        public bool Intersects(Rectangle player)
+        {
+            return _location.Intersects(player);
+        }
+
     }
 
 }
