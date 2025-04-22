@@ -21,6 +21,7 @@ namespace Mono_Topic_5___Making_a_Class
         Ghost ghost1;
 
         List<Texture2D> ghostTextures;
+        List<Ghost> ghosts;
         Texture2D titleTexture;
         Texture2D hauntedBackgroundTexture;
         Texture2D endTexture;
@@ -35,7 +36,7 @@ namespace Mono_Topic_5___Making_a_Class
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
         }
 
         protected override void Initialize()
@@ -43,12 +44,17 @@ namespace Mono_Topic_5___Making_a_Class
             // TODO: Add your initialization logic here
 
             ghostTextures = new List<Texture2D>();
+            ghosts = new List<Ghost>();
             generator = new Random();
             marioRect = new Rectangle(0, 0, 30, 30);
             screen = Screen.Title;
 
             base.Initialize();
 
+            for (int i = 0; i < 19; i++)
+            {
+                ghosts.Add(new Ghost(ghostTextures, new Rectangle(generator.Next(_graphics.PreferredBackBufferWidth - 40), generator.Next(_graphics.PreferredBackBufferHeight - 40), 40, 40)));
+            }
             ghost1 = new Ghost(ghostTextures, new Rectangle(150, 250, 40, 40));
         }
 
@@ -80,7 +86,7 @@ namespace Mono_Topic_5___Making_a_Class
 
             mouseState = Mouse.GetState();
             keyboardState = Keyboard.GetState();
-            
+            marioRect.Location = mouseState.Position;
 
             if (screen == Screen.Title)
             {
@@ -92,10 +98,19 @@ namespace Mono_Topic_5___Making_a_Class
             else if (screen == Screen.House)
             {
                 ghost1.Update(gameTime, mouseState);
-                if (ghost1.Contains(mouseState.Position) && mouseState.LeftButton == ButtonState.Pressed)
+                if (ghost1.Intersects(marioRect) && mouseState.LeftButton == ButtonState.Pressed)
                 {
                     screen = Screen.End;
                 }
+                for (int i = 0; i < 19; i++)
+                {
+                    ghosts[i].Update(gameTime, mouseState);
+                    if (ghosts[i].Intersects(marioRect) && mouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        screen = Screen.End;
+                    }
+                }
+
             }
 
             base.Update(gameTime);
@@ -115,11 +130,18 @@ namespace Mono_Topic_5___Making_a_Class
             {
                 _spriteBatch.Draw(hauntedBackgroundTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
                 ghost1.Draw(_spriteBatch);
+                for (int i = 0; i < 19; i++)
+                {
+                    ghosts[i].Draw(_spriteBatch);
+                }
             }
             else
             {
                 _spriteBatch.Draw(endTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
             }
+
+            _spriteBatch.Draw(marioTexture, marioRect, Color.White);
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
